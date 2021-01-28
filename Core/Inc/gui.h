@@ -38,7 +38,6 @@ typedef enum UI_Screen
 void clearArea(uint16_t x, uint16_t y, uint16_t width, uint16_t height);
 void initaliseDrivers();
 void initaliseEventModes();
-void updateMenuScroll();
 
 /* UI Pages */
 void drawScreen(UI_Screen ui_screen);
@@ -62,6 +61,9 @@ void updateCarConfigurationScreen();
 void drawAdvancedScreen();
 void updateAdvancedScreen();
 
+/* Returns true if the selected menu option has changed */
+bool updateMenuScroll();
+
 /* UI Components */
 void drawHeaderBar(Drive_Mode current_drive_mode);
 
@@ -71,7 +73,7 @@ void updateMenuItemWithValue(uint16_t y, uint8_t* label, uint8_t value, bool sel
 void drawReading(uint16_t y, uint8_t* label, uint8_t* value, bool draw_borders);
 void updateReading(uint16_t y, uint8_t* value, uint32_t text_color);
 
-void drawMenuItem(uint16_t y, uint8_t* label, bool draw_borders);
+void drawMenuItem(uint16_t y, uint8_t* label, bool selected, bool draw_borders);
 void updateMenuItem(uint16_t y, uint8_t* label, bool selected);
 
 void drawAccumulatorTotalBar(uint16_t yPos);

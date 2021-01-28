@@ -90,6 +90,8 @@ extern sFONT Font_RobotoMedium32;
 extern sFONT Font_RobotoMedium34;
 extern sFONT Font_RobotoMedium36;
 
+extern sFONT FontRoboto28;
+
 extern const uint8_t* lightning_bitmap;
 
 /**

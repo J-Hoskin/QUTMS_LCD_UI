@@ -1,6 +1,0 @@
-sd.c:27:5:bufsize	24	static
-sd.c:34:6:clear_buffer	16	static
-sd.c:39:6:mount_sd_card	8	static
-sd.c:45:6:get_sd_capacity	16	static
-sd.c:59:6:create_sd_file	24	static
-sd.c:74:6:update_sd_file	16	static

@@ -8,10 +8,6 @@ RM := rm -rf
 
 # All of the sources participating in the build are defined here
 -include sources.mk
--include Middlewares/Third_Party/FatFs/src/option/subdir.mk
--include Middlewares/Third_Party/FatFs/src/subdir.mk
--include FATFS/Target/subdir.mk
--include FATFS/App/subdir.mk
 -include Drivers/STM32F4xx_HAL_Driver/Src/subdir.mk
 -include Core/Startup/subdir.mk
 -include Core/Src/Other/subdir.mk
@@ -19,6 +15,7 @@ RM := rm -rf
 -include Core/Src/Lcd/Fonts/Roboto/Black/subdir.mk
 -include Core/Src/Lcd/Fonts/Legacy/subdir.mk
 -include Core/Src/Lcd/Fonts/Icons/subdir.mk
+-include Core/Src/Lcd/Fonts/subdir.mk
 -include Core/Src/Lcd/subdir.mk
 -include Core/Src/subdir.mk
 -include subdir.mk
@@ -64,8 +61,8 @@ all: main-build
 main-build: QUTMS_LCD_UI.elf secondary-outputs
 
 # Tool invocations
-QUTMS_LCD_UI.elf: $(OBJS) $(USER_OBJS) C:\Users\Calcutt\Documents\QUT\ MS\QUTMS_LCD_UI\STM32F446RETX_FLASH.ld
-	arm-none-eabi-gcc -o "QUTMS_LCD_UI.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Users\Calcutt\Documents\QUT MS\QUTMS_LCD_UI\STM32F446RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="QUTMS_LCD_UI.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
+QUTMS_LCD_UI.elf: $(OBJS) $(USER_OBJS) C:\Users\J_Hos\OneDrive\Documents\QUTMS_LCD_UI\STM32F446RETX_FLASH.ld
+	arm-none-eabi-gcc -o "QUTMS_LCD_UI.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Users\J_Hos\OneDrive\Documents\QUTMS_LCD_UI\STM32F446RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="QUTMS_LCD_UI.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 

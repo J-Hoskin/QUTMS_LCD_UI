@@ -19,6 +19,7 @@ OBJCOPY_BIN :=
 
 # Every subdirectory with source files must be described here
 SUBDIRS := \
+Core/Src/Lcd/Fonts \
 Core/Src/Lcd/Fonts/Icons \
 Core/Src/Lcd/Fonts/Legacy \
 Core/Src/Lcd/Fonts/Roboto/Black \
@@ -28,8 +29,4 @@ Core/Src/Other \
 Core/Src \
 Core/Startup \
 Drivers/STM32F4xx_HAL_Driver/Src \
-FATFS/App \
-FATFS/Target \
-Middlewares/Third_Party/FatFs/src \
-Middlewares/Third_Party/FatFs/src/option \
 

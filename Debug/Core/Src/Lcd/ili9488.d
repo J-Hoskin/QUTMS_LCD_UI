@@ -1,6 +1,6 @@
 Core/Src/Lcd/ili9488.o: ../Core/Src/Lcd/ili9488.c ../Core/Inc/main.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h \
- C:/Users/Calcutt/Documents/QUT\ MS/QUTMS_LCD_UI/Core/Inc/Other/stm32f4xx_hal_conf.h \
+ ../Core/Inc/stm32f4xx_hal_conf.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_def.h \
  ../Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f4xx.h \
@@ -39,7 +39,7 @@ Core/Src/Lcd/ili9488.o: ../Core/Src/Lcd/ili9488.c ../Core/Inc/main.h \
 
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h:
 
-C:/Users/Calcutt/Documents/QUT\ MS/QUTMS_LCD_UI/Core/Inc/Other/stm32f4xx_hal_conf.h:
+../Core/Inc/stm32f4xx_hal_conf.h:
 
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h:
 
