@@ -19,13 +19,12 @@ extern Event_Profile events[4];
 extern uint8_t selected_menu_option;
 extern uint8_t max_menu_option;
 extern float accumul_volts, accumul_temp, gearbox_temp, inverter_temp, motor_temp, accumul_charge, accumul_delta;
+extern float drawn_accumul_volts, drawn_accumul_temp, drawn_gearbox_temp, drawn_inverter_temp, drawn_motor_temp, drawn_accumul_charge, drawn_accumul_delta;
 extern uint8_t total_laps, current_lap;
 char* menus[4] = { "Driver Select", "Event Select", "Car Config", "Advanced" };
 bool menu_pot_incremented = false;
 bool menu_pot_decremented = false;
 extern UI_Screen current_screen;
-float drawn_accumul_charge = 0;
-float drawn_accumul_delta = 0;
 #define max(x,y) (((x) >= (y)) ? (x) : (y));
 #define min(x,y) (((x) <= (y)) ? (x) : (y));
 
@@ -111,11 +110,9 @@ void drawRTDScreen() {
 	// Draw readings
 	char* reading[5] = { "Accumul (V)", "Accumul (C)", "Gearbox (C)", "Invertr (C)", "Motor   (C)"};
 	uint16_t startingXPos = 245;
-	drawReading(startingXPos, reading[0], "?", false);
-	for (int i = 1; i < 4; i++) {
-		drawReading(startingXPos + (reading_line_height * i), reading[i], "?", true);
+	for (int i = 0; i < 5; i++) {
+		drawReading(startingXPos + (reading_line_height * i), reading[i], "?", i != 0 && i != 4 ? true : false);
 	}
-	drawReading(startingXPos + (reading_line_height * 4), reading[4], "?", false);
 }
 
 void updateRTDScreen() {
@@ -128,70 +125,86 @@ void updateRTDScreen() {
     uint16_t startingYPos = 245;
 
     // Accumul. (v)
-    //clearArea(screen_width - 60, startingYPos + (reading_line_height * 0) + ((reading_line_height / 2) - 12), 90, 24);
-    sprintf(reading_value, "%f", accumul_volts);
-    if (accumul_volts > 50) {
-        updateReading(startingYPos + (reading_line_height * 0), reading_value, warning_color);
-    }
-    else if (accumul_volts <= 50 && accumul_volts > 30) {
-        updateReading(startingYPos + (reading_line_height * 0), reading_value, caution_color);
-    }
-    else {
-        updateReading(startingYPos + (reading_line_height * 0), reading_value, nominal_color);
+    if(accumul_volts != drawn_accumul_volts){
+    	clearArea(screen_width - 60, startingYPos + (reading_line_height * 0) + ((reading_line_height / 2) - 12), 90, 24);
+		sprintf(reading_value, "%.0f", accumul_volts);
+    	if (accumul_volts > 50) {
+			updateReading(startingYPos + (reading_line_height * 0), reading_value, warning_color);
+		}
+		else if (accumul_volts <= 50 && accumul_volts > 30) {
+			updateReading(startingYPos + (reading_line_height * 0), reading_value, caution_color);
+		}
+		else {
+			updateReading(startingYPos + (reading_line_height * 0), reading_value, nominal_color);
+		}
+
+    	drawn_accumul_volts = accumul_volts;
     }
 
-    /*
+
     // Accumul. (C)
-    clearArea(screen_width - 60, startingYPos + (reading_line_height * 1) + ((reading_line_height / 2) - 12), 90, 24);
-    sprintf(reading_value, "%.0f", accumul_temp);
-    if (accumul_temp > 50) {
-		updateReading(startingYPos + (reading_line_height * 1), reading_value, warning_color);
-	}
-	else if (accumul_temp <= 50 && accumul_temp > 30) {
-		updateReading(startingYPos + (reading_line_height * 1), reading_value, caution_color);
-	}
-	else {
-		updateReading(startingYPos + (reading_line_height * 1), reading_value, nominal_color);
-	}
+    if(accumul_temp != drawn_accumul_temp){
+    	clearArea(screen_width - 60, startingYPos + (reading_line_height * 1) + ((reading_line_height / 2) - 12), 90, 24);
+    	sprintf(reading_value, "%.0f", accumul_temp);
+		if (accumul_temp > 50) {
+			updateReading(startingYPos + (reading_line_height * 1), reading_value, warning_color);
+		}
+		else if (accumul_temp <= 50 && accumul_temp > 30) {
+			updateReading(startingYPos + (reading_line_height * 1), reading_value, caution_color);
+		}
+		else {
+			updateReading(startingYPos + (reading_line_height * 1), reading_value, nominal_color);
+		}
+		drawn_accumul_temp = accumul_temp;
+    }
 
     // Gearbox  (C)
-    clearArea(screen_width - 60, startingYPos + (reading_line_height * 2) + ((reading_line_height / 2) - 12), 90, 24);
-	sprintf(reading_value, "%.0f", gearbox_temp);
-	if (gearbox_temp > 50) {
-		updateReading(startingYPos + (reading_line_height * 2), reading_value, warning_color);
-	}
-	else if (gearbox_temp <= 50 && gearbox_temp > 30) {
-		updateReading(startingYPos + (reading_line_height * 2), reading_value, caution_color);
-	}
-	else {
-		updateReading(startingYPos + (reading_line_height * 2), reading_value, nominal_color);
+	if(gearbox_temp != drawn_gearbox_temp){
+		clearArea(screen_width - 60, startingYPos + (reading_line_height * 2) + ((reading_line_height / 2) - 12), 90, 24);
+		sprintf(reading_value, "%.0f", gearbox_temp);
+		if (gearbox_temp > 50) {
+			updateReading(startingYPos + (reading_line_height * 2), reading_value, warning_color);
+		}
+		else if (gearbox_temp <= 50 && gearbox_temp > 30) {
+			updateReading(startingYPos + (reading_line_height * 2), reading_value, caution_color);
+		}
+		else {
+			updateReading(startingYPos + (reading_line_height * 2), reading_value, nominal_color);
+		}
+		drawn_gearbox_temp = gearbox_temp;
 	}
 
     // Inverter (C)
-	clearArea(screen_width - 60, startingYPos + (reading_line_height * 3) + ((reading_line_height / 2) - 12), 90, 24);
-	sprintf(reading_value, "%.0f", inverter_temp);
-	if (inverter_temp > 50) {
-		updateReading(startingYPos + (reading_line_height * 3), reading_value, warning_color);
-	}
-	else if (inverter_temp <= 50 && inverter_temp > 30) {
-		updateReading(startingYPos + (reading_line_height * 3), reading_value, caution_color);
-	}
-	else {
-		updateReading(startingYPos + (reading_line_height * 3), reading_value, nominal_color);
+	if(inverter_temp != drawn_inverter_temp){
+		clearArea(screen_width - 60, startingYPos + (reading_line_height * 3) + ((reading_line_height / 2) - 12), 90, 24);
+		sprintf(reading_value, "%.0f", inverter_temp);
+		if (inverter_temp > 50) {
+			updateReading(startingYPos + (reading_line_height * 3), reading_value, warning_color);
+		}
+		else if (inverter_temp <= 50 && inverter_temp > 30) {
+			updateReading(startingYPos + (reading_line_height * 3), reading_value, caution_color);
+		}
+		else {
+			updateReading(startingYPos + (reading_line_height * 3), reading_value, nominal_color);
+		}
+		drawn_inverter_temp = inverter_temp;
 	}
 
     // Motor    (C)
-	clearArea(screen_width - 60, startingYPos + (reading_line_height * 4) + ((reading_line_height / 2) - 12), 90, 24);
-	sprintf(reading_value, "%.0f", motor_temp);
-	if (inverter_temp > 50) {
-		updateReading(startingYPos + (reading_line_height * 4), reading_value, warning_color);
+	if(motor_temp != drawn_motor_temp){
+		clearArea(screen_width - 60, startingYPos + (reading_line_height * 4) + ((reading_line_height / 2) - 12), 90, 24);
+		sprintf(reading_value, "%.0f", motor_temp);
+		if (motor_temp > 50) {
+			updateReading(startingYPos + (reading_line_height * 4), reading_value, warning_color);
+		}
+		else if (motor_temp <= 50 && motor_temp > 30) {
+			updateReading(startingYPos + (reading_line_height * 4), reading_value, caution_color);
+		}
+		else {
+			updateReading(startingYPos + (reading_line_height * 4), reading_value, nominal_color);
+		}
+		drawn_motor_temp = motor_temp;
 	}
-	else if (motor_temp <= 50 && motor_temp > 30) {
-		updateReading(startingYPos + (reading_line_height * 4), reading_value, caution_color);
-	}
-	else {
-		updateReading(startingYPos + (reading_line_height * 4), reading_value, nominal_color);
-	}*/
 
 }
 
@@ -297,6 +310,7 @@ void updateEventSelectionScreen() {
 }
 
 void drawCarConfigurationScreen() {
+	selected_menu_option = 2;
 	// Draw header bar
 	drawHeaderBar(STATIC_MODE);
 	BSP_LCD_SetTextColor(primary_back_color);
@@ -310,18 +324,22 @@ void drawCarConfigurationScreen() {
 
 	// Draw settings
 	uint8_t startingYPos = 54;
-	drawMenuItemWithValue(startingYPos + (menu_line_height * 0), "Reg Braking", current_driver.car_configuration.regen_braking, false);
-    drawMenuItemWithValue(startingYPos + (menu_line_height * 1), "Torq Vector", current_driver.car_configuration.torque_vectoring, true);
-    drawMenuItemWithValue(startingYPos + (menu_line_height * 2), "Dash Bright", current_driver.car_configuration.dash_led_brightness, true);
-    drawMenuItemWithValue(startingYPos + (menu_line_height * 3), "Scrn Bright", current_driver.car_configuration.screen_brightness, true);
+	drawMenuItemWithValue(startingYPos + (menu_line_height * 0), "Reg Braking", current_driver.car_configuration.regen_braking, selected_menu_option == 0, false);
+    drawMenuItemWithValue(startingYPos + (menu_line_height * 1), "Torq Vector", current_driver.car_configuration.torque_vectoring, selected_menu_option == 1, true);
+    drawMenuItemWithValue(startingYPos + (menu_line_height * 2), "Dash Bright", current_driver.car_configuration.dash_led_brightness, selected_menu_option == 2, true);
+    drawMenuItemWithValue(startingYPos + (menu_line_height * 3), "Scrn Bright", current_driver.car_configuration.screen_brightness, selected_menu_option == 3, true);
 }
 void updateCarConfigurationScreen() {
 	// Draw settings
+	bool update_menu = updateMenuScroll() /*|| pot_incremented*/;
+
 	uint8_t startingYPos = 54;
-    updateMenuItemWithValue(startingYPos + (menu_line_height * 0), "Reg Brake", current_driver.car_configuration.regen_braking, false);
-    updateMenuItemWithValue(startingYPos + (menu_line_height * 1), "Torq Vect", current_driver.car_configuration.torque_vectoring, false);
-    updateMenuItemWithValue(startingYPos + (menu_line_height * 2), "Dash Bright", current_driver.car_configuration.dash_led_brightness, false);
-    updateMenuItemWithValue(startingYPos + (menu_line_height * 3), "Scrn Bright", current_driver.car_configuration.screen_brightness, false);
+	if(update_menu){
+		updateMenuItemWithValue(startingYPos + (menu_line_height * 0), "Reg Braking", current_driver.car_configuration.regen_braking, selected_menu_option == 0);
+		updateMenuItemWithValue(startingYPos + (menu_line_height * 1), "Torq Vector", current_driver.car_configuration.torque_vectoring, selected_menu_option == 1);
+		updateMenuItemWithValue(startingYPos + (menu_line_height * 2), "Dash Bright", current_driver.car_configuration.dash_led_brightness, selected_menu_option == 2);
+		updateMenuItemWithValue(startingYPos + (menu_line_height * 3), "Scrn Bright", current_driver.car_configuration.screen_brightness, selected_menu_option == 3);
+	}
 }
 
 /* UI Components */
@@ -401,6 +419,9 @@ void updateAccumulatorDeltaBar(uint16_t yPos) {
 
 	BSP_LCD_SetFont(&Font_RobotoBlack36);
 	uint8_t displayText[5];
+
+	// Reduce liklihood of float addition inaccuracies eg. 1.000012
+	accumul_delta = trunc(accumul_delta * 100) / 100;
 	sprintf(displayText, "%.2f", accumul_delta);
 
 	//TODO accumul_delta suffers from rounding error
@@ -561,7 +582,7 @@ void drawMenuItem(uint16_t y, uint8_t* label, bool selected, bool draw_borders) 
 	BSP_LCD_SetTextColor(primary_text_color);
 	if(selected) BSP_LCD_SetTextColor(selection_color);
 	BSP_LCD_SetBackColor(LCD_COLOR_BLACK);
-	BSP_LCD_SetFont(&Font_RobotoMedium26);
+	BSP_LCD_SetFont(&Font32);
 	BSP_LCD_DisplayStringAt(0, y + ((menu_line_height / 2) - 13), label, CENTER_MODE);
 }
 void updateMenuItem(uint16_t y, uint8_t* label, bool selected) {
@@ -573,7 +594,7 @@ void updateMenuItem(uint16_t y, uint8_t* label, bool selected) {
     BSP_LCD_DisplayStringAt(0, y + ((menu_line_height / 2) - 13), label, CENTER_MODE);
 }
 
-void drawMenuItemWithValue(uint16_t y, uint8_t* label, uint8_t value, bool draw_borders) {
+void drawMenuItemWithValue(uint16_t y, uint8_t* label, uint8_t value, bool selected, bool draw_borders) {
     // Draw outline
     BSP_LCD_SetTextColor(primary_back_color);
     if (draw_borders) {
@@ -586,7 +607,8 @@ void drawMenuItemWithValue(uint16_t y, uint8_t* label, uint8_t value, bool draw_
     BSP_LCD_DrawLine(244, y, 244, y + menu_line_height);
 
     // Draw label text
-    BSP_LCD_SetTextColor(primary_text_color);
+    if(selected) BSP_LCD_SetTextColor(selection_color);
+	else BSP_LCD_SetTextColor(primary_text_color);
     BSP_LCD_SetFont(&Font_RobotoMedium26);
     BSP_LCD_SetBackColor(LCD_COLOR_BLACK);
     BSP_LCD_DisplayStringAt(15, y + ((menu_line_height / 2) - 13), label, LEFT_MODE);

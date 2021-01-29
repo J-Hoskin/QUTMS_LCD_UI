@@ -67,7 +67,7 @@ bool updateMenuScroll();
 /* UI Components */
 void drawHeaderBar(Drive_Mode current_drive_mode);
 
-void drawMenuItemWithValue(uint16_t y, uint8_t* label, uint8_t value, bool draw_borders);
+void drawMenuItemWithValue(uint16_t y, uint8_t* label, uint8_t value, bool selected, bool draw_borders);
 void updateMenuItemWithValue(uint16_t y, uint8_t* label, uint8_t value, bool selected);
 
 void drawReading(uint16_t y, uint8_t* label, uint8_t* value, bool draw_borders);

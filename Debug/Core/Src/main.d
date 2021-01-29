@@ -33,8 +33,8 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h \
  ../Core/Inc/gui.h ../Core/Inc/car_settings.h ../Core/Inc/fonts.h \
- C:/Users/J_Hos/OneDrive/Documents/QUTMS_LCD_UI/Core/Src/Lcd/stm32_adafruit_lcd.h \
- C:/Users/J_Hos/OneDrive/Documents/QUTMS_LCD_UI/Core/Src/Lcd/lcd.h \
+ C:/Users/Calcutt/Documents/QUT\ MS/QUTMS_LCD_UI/Core/Src/Lcd/stm32_adafruit_lcd.h \
+ C:/Users/Calcutt/Documents/QUT\ MS/QUTMS_LCD_UI/Core/Src/Lcd/lcd.h \
  ../Core/Inc/fonts.h
 
 ../Core/Inc/main.h:
@@ -111,8 +111,8 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
 
 ../Core/Inc/fonts.h:
 
-C:/Users/J_Hos/OneDrive/Documents/QUTMS_LCD_UI/Core/Src/Lcd/stm32_adafruit_lcd.h:
+C:/Users/Calcutt/Documents/QUT\ MS/QUTMS_LCD_UI/Core/Src/Lcd/stm32_adafruit_lcd.h:
 
-C:/Users/J_Hos/OneDrive/Documents/QUTMS_LCD_UI/Core/Src/Lcd/lcd.h:
+C:/Users/Calcutt/Documents/QUT\ MS/QUTMS_LCD_UI/Core/Src/Lcd/lcd.h:
 
 ../Core/Inc/fonts.h:
