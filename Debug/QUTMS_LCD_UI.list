@@ -27,23 +27,23 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   ALLOC
  11 .ARM.attributes 00000030  00000000  00000000  000302d0  2**0
                   CONTENTS, READONLY
- 12 .debug_info   0001940f  00000000  00000000  00030300  2**0
+ 12 .debug_info   00018bfc  00000000  00000000  00030300  2**0
                   CONTENTS, READONLY, DEBUGGING
- 13 .debug_abbrev 000036c3  00000000  00000000  0004970f  2**0
+ 13 .debug_abbrev 00003661  00000000  00000000  00048efc  2**0
                   CONTENTS, READONLY, DEBUGGING
- 14 .debug_aranges 00001768  00000000  00000000  0004cdd8  2**3
+ 14 .debug_aranges 00001768  00000000  00000000  0004c560  2**3
                   CONTENTS, READONLY, DEBUGGING
- 15 .debug_macro  00025661  00000000  00000000  0004e540  2**0
+ 15 .debug_macro  00025594  00000000  00000000  0004dcc8  2**0
                   CONTENTS, READONLY, DEBUGGING
- 16 .debug_line   000128b4  00000000  00000000  00073ba1  2**0
+ 16 .debug_line   00012760  00000000  00000000  0007325c  2**0
                   CONTENTS, READONLY, DEBUGGING
- 17 .debug_str    000e215f  00000000  00000000  00086455  2**0
+ 17 .debug_str    000e2115  00000000  00000000  000859bc  2**0
                   CONTENTS, READONLY, DEBUGGING
- 18 .comment      0000007b  00000000  00000000  001685b4  2**0
+ 18 .comment      0000007b  00000000  00000000  00167ad1  2**0
                   CONTENTS, READONLY
- 19 .debug_ranges 00001520  00000000  00000000  00168630  2**3
+ 19 .debug_ranges 00001520  00000000  00000000  00167b50  2**3
                   CONTENTS, READONLY, DEBUGGING
- 20 .debug_frame  00006a00  00000000  00000000  00169b50  2**2
+ 20 .debug_frame  00006a00  00000000  00000000  00169070  2**2
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -5176,9 +5176,9 @@ void changeEvent(Event_Profile event_profile){
  8002760:	20000340 	.word	0x20000340
 
 08002764 <clearArea>:
+char* menus[4] = { "Driver Select", "Event Select", "Car Config", "Advanced" };
+bool menu_pot_incremented, menu_pot_decremented, menu_pot_pressed;
 extern UI_Screen current_screen;
-#define max(x,y) (((x) >= (y)) ? (x) : (y));
-#define min(x,y) (((x) <= (y)) ? (x) : (y));
 
 /* General UI functions */
 void clearArea(uint16_t x, uint16_t y, uint16_t width, uint16_t height){

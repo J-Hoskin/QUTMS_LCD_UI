@@ -13,19 +13,15 @@
 #include <math.h>
 
 
-extern Driver_Profile drivers[4];
-extern Driver_Profile current_driver;
+extern Driver_Profile drivers[4], current_driver;
 extern Event_Profile events[4];
-extern uint8_t selected_menu_option;
-extern uint8_t max_menu_option;
+extern uint8_t selected_menu_option, max_menu_option;
 extern float accumul_volts, accumul_temp, gearbox_temp, inverter_temp, motor_temp, accumul_charge, accumul_delta;
 extern float drawn_accumul_volts, drawn_accumul_temp, drawn_gearbox_temp, drawn_inverter_temp, drawn_motor_temp, drawn_accumul_charge, drawn_accumul_delta;
 extern uint8_t total_laps, current_lap;
 char* menus[4] = { "Driver Select", "Event Select", "Car Config", "Advanced" };
 bool menu_pot_incremented, menu_pot_decremented, menu_pot_pressed;
 extern UI_Screen current_screen;
-#define max(x,y) (((x) >= (y)) ? (x) : (y));
-#define min(x,y) (((x) <= (y)) ? (x) : (y));
 
 /* General UI functions */
 void clearArea(uint16_t x, uint16_t y, uint16_t width, uint16_t height){

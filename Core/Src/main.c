@@ -44,12 +44,9 @@
 
 /* Private variables ---------------------------------------------------------*/
 RTC_HandleTypeDef hrtc;
-
 SD_HandleTypeDef hsd;
-
 SPI_HandleTypeDef hspi1;
 SPI_HandleTypeDef hspi2;
-
 UART_HandleTypeDef huart2;
 
 /* USER CODE BEGIN PV */
@@ -72,7 +69,6 @@ static void MX_USART2_UART_Init(void);
 
 // Car configuration
 Drive_Mode current_drive_mode = STATIC_MODE;
-
 extern Event_Profile current_event;
 uint8_t selected_menu_option, max_menu_option;
 UI_Screen current_screen =  CAR_CONFIGURATION_SCREEN;
@@ -80,14 +76,12 @@ float accumul_volts = 50.0f, accumul_temp = 40.0f, gearbox_temp = 1.0f, inverter
 		20.0f, motor_temp = 49.0f, accumul_charge = 0.5f, accumul_delta = 0.0f;
 float drawn_accumul_volts = 0.0f, drawn_accumul_temp = 0.0f, drawn_gearbox_temp = 0.0f, drawn_inverter_temp = 0.0f, drawn_motor_temp = 0.0f, drawn_accumul_charge = 0.0f, drawn_accumul_delta = 0.0f;
 uint8_t total_laps = 0, current_lap = 1;
-extern Driver_Profile drivers[4];
-extern Driver_Profile current_driver;
+extern Driver_Profile drivers[4], current_driver;
 extern Event_Profile events[4];
-volatile bool activate_btn_pressed = false;
-volatile uint8_t active_btn_state = 0;
-volatile bool back_btn_pressed = false;
-volatile uint8_t back_btn_state = 0;
 
+// Inputs
+volatile bool activate_btn_pressed, back_btn_pressed;
+volatile uint8_t active_btn_state = 0, back_btn_state = 0;
 extern bool menu_pot_incremented, menu_pot_decremented, menu_pot_pressed;
 uint8_t prev_pot_value, current_pot_value;
 uint16_t raw;
