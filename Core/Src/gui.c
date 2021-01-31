@@ -89,10 +89,36 @@ bool updateMenuScroll() {
 
 void updateCarConfiguration(){
 	if(menu_pot_incremented){
-
+		switch(selected_menu_option){
+			case 0:
+				current_driver.car_configuration.regen_braking += 1;
+				break;
+			case 1:
+				current_driver.car_configuration.torque_vectoring += 1;
+				break;
+			case 2:
+				current_driver.car_configuration.dash_led_brightness += 1;
+				break;
+			case 3:
+				current_driver.car_configuration.screen_brightness += 1;
+				break;
+		}
 	}
 	else if(menu_pot_decremented){
-
+		switch(selected_menu_option){
+			case 0:
+				current_driver.car_configuration.regen_braking -= 1;
+				break;
+			case 1:
+				current_driver.car_configuration.torque_vectoring -= 1;
+				break;
+			case 2:
+				current_driver.car_configuration.dash_led_brightness -= 1;
+				break;
+			case 3:
+				current_driver.car_configuration.screen_brightness -= 1;
+				break;
+		}
 	}
 }
 
@@ -312,21 +338,23 @@ void drawCarConfigurationScreen() {
 
 	// Draw settings
 	uint8_t startingYPos = 62;
-	drawMenuItemWithValue(startingYPos + (menu_line_height * 0), "Reg Braking", current_driver.car_configuration.regen_braking, selected_menu_option == 0, false);
-    drawMenuItemWithValue(startingYPos + (menu_line_height * 1), "Torq Vector", current_driver.car_configuration.torque_vectoring, selected_menu_option == 1, true);
-    drawMenuItemWithValue(startingYPos + (menu_line_height * 2), "Dash Bright", current_driver.car_configuration.dash_led_brightness, selected_menu_option == 2, true);
-    drawMenuItemWithValue(startingYPos + (menu_line_height * 3), "Scrn Bright", current_driver.car_configuration.screen_brightness, selected_menu_option == 3, true);
+	uint8_t yOffset = menu_line_height + 46;
+	drawMenuItemWithValue(startingYPos + (yOffset * 0), "Regen Braking", current_driver.car_configuration.regen_braking, selected_menu_option == 0, false);
+    drawMenuItemWithValue(startingYPos + (yOffset * 1), "Torque Vector", current_driver.car_configuration.torque_vectoring, selected_menu_option == 1, true);
+    drawMenuItemWithValue(startingYPos + (yOffset * 2), "Dash Bright", current_driver.car_configuration.dash_led_brightness, selected_menu_option == 2, true);
+    drawMenuItemWithValue(startingYPos + (yOffset * 3), "Screen Bright", current_driver.car_configuration.screen_brightness, selected_menu_option == 3, true);
 }
 void updateCarConfigurationScreen() {
 	// Draw settings
 	bool update_menu = updateMenuScroll() /*|| pot_incremented*/;
 
 	uint8_t startingYPos = 62;
+	uint8_t yOffset = menu_line_height + 46;
 	if(update_menu){
-		updateMenuItemWithValue(startingYPos + (menu_line_height * 0), "Reg Braking", current_driver.car_configuration.regen_braking, selected_menu_option == 0);
-		updateMenuItemWithValue(startingYPos + (menu_line_height * 1), "Torq Vector", current_driver.car_configuration.torque_vectoring, selected_menu_option == 1);
-		updateMenuItemWithValue(startingYPos + (menu_line_height * 2), "Dash Bright", current_driver.car_configuration.dash_led_brightness, selected_menu_option == 2);
-		updateMenuItemWithValue(startingYPos + (menu_line_height * 3), "Scrn Bright", current_driver.car_configuration.screen_brightness, selected_menu_option == 3);
+		updateMenuItemWithValue(startingYPos + (yOffset * 0), "Regen Braking", current_driver.car_configuration.regen_braking, selected_menu_option == 0);
+		updateMenuItemWithValue(startingYPos + (yOffset * 1), "Torque Vector", current_driver.car_configuration.torque_vectoring, selected_menu_option == 1);
+		updateMenuItemWithValue(startingYPos + (yOffset * 2), "Dash Bright", current_driver.car_configuration.dash_led_brightness, selected_menu_option == 2);
+		updateMenuItemWithValue(startingYPos + (yOffset * 3), "Screen Bright", current_driver.car_configuration.screen_brightness, selected_menu_option == 3);
 	}
 }
 
@@ -550,21 +578,21 @@ void drawReading(uint16_t y, uint8_t* label, uint8_t* value, bool draw_borders) 
 
 	// Draw label text
 	BSP_LCD_SetTextColor(primary_text_color);
-	BSP_LCD_SetFont(&Font_RobotoMedium26);
+	BSP_LCD_SetFont(&Font32);
 	BSP_LCD_SetBackColor(LCD_COLOR_BLACK);
-	BSP_LCD_DisplayStringAt(15, y + ((reading_line_height / 2) - 13), label, LEFT_MODE);
+	BSP_LCD_DisplayStringAt(15, y + ((reading_line_height / 2) - 17), label, LEFT_MODE);
 
 	// Draw value text
-	BSP_LCD_SetFont(&Font_RobotoMedium28);
+	BSP_LCD_SetFont(&Font_RobotoMedium32);
 	BSP_LCD_SetTextColor(LCD_COLOR_GREEN);
-	BSP_LCD_DisplayStringAt(screen_width / 2 - 28, y + ((reading_line_height / 2) - 16), value, CENTER_MODE);
+	BSP_LCD_DisplayStringAt(screen_width / 2 - 36, y + ((reading_line_height / 2) - 17), value, CENTER_MODE);
 }
 void updateReading(uint16_t y, uint8_t* value, uint32_t text_color) {
     // Update value text
     BSP_LCD_SetBackColor(LCD_COLOR_BLACK);
     BSP_LCD_SetTextColor(text_color);
-    BSP_LCD_SetFont(&Font_RobotoMedium28);
-    BSP_LCD_DisplayStringAt(screen_width / 2 - 28, y + ((reading_line_height / 2) - 16), value, CENTER_MODE);
+    BSP_LCD_SetFont(&Font_RobotoMedium32);
+    BSP_LCD_DisplayStringAt(screen_width / 2 - 36, y + ((reading_line_height / 2) - 17), value, CENTER_MODE);
 }
 
 void drawMenuItem(uint16_t y, uint8_t* label, bool selected, bool draw_borders) {
@@ -597,41 +625,40 @@ void drawMenuItemWithValue(uint16_t y, uint8_t* label, uint8_t value, bool selec
     // Draw outline
     BSP_LCD_SetTextColor(primary_back_color);
     if (draw_borders) {
-        // Top line
         BSP_LCD_DrawHLine(0, y, screen_width);
-        // Bottom line
-        BSP_LCD_DrawHLine(0, y + menu_line_height, screen_width);
     }
-    // Value vertical divider
-    BSP_LCD_DrawLine(244, y, 244, y + menu_line_height);
 
     // Draw label text
+    BSP_LCD_SetTextColor(primary_text_color);
     if(selected) BSP_LCD_SetTextColor(selection_color);
-	else BSP_LCD_SetTextColor(primary_text_color);
-    BSP_LCD_SetFont(&Font_RobotoMedium26);
+
+    BSP_LCD_SetFont(&Font32);
     BSP_LCD_SetBackColor(LCD_COLOR_BLACK);
-    BSP_LCD_DisplayStringAt(15, y + ((menu_line_height / 2) - 13), label, LEFT_MODE);
+    BSP_LCD_DisplayStringAt(0, y + ((menu_line_height / 2) - 16), label, CENTER_MODE);
 
     // Draw value text
 	uint8_t displayValue[5];
+	uint8_t valueYOffset = 42;
 	sprintf(displayValue, "%d", value);
-    BSP_LCD_SetFont(&Font_RobotoBlack26);
-    BSP_LCD_DisplayStringAt(screen_width / 2 - 28, y + ((menu_line_height / 2) - 13), displayValue, CENTER_MODE);
+    BSP_LCD_SetFont(&Font_RobotoBlack32);
+    BSP_LCD_DisplayStringAt(0, y + valueYOffset + ((menu_line_height / 2) - 16), displayValue, CENTER_MODE);
 }
 void updateMenuItemWithValue(uint16_t y, uint8_t* label, uint8_t value, bool selected) {
     // Highlights both label and value of menu item if selected
+	BSP_LCD_SetTextColor(primary_text_color);
     if(selected) BSP_LCD_SetTextColor(selection_color);
-    else BSP_LCD_SetTextColor(primary_text_color);
 
     // Draw label text
-    BSP_LCD_SetFont(&Font_RobotoMedium26);
+    BSP_LCD_SetFont(&Font32);
     BSP_LCD_SetBackColor(LCD_COLOR_BLACK);
-    BSP_LCD_DisplayStringAt(15, y + ((menu_line_height / 2) - 12), label, LEFT_MODE);
+    BSP_LCD_DisplayStringAt(0, y + ((menu_line_height / 2) - 16), label, CENTER_MODE);
 
     // Draw value text
     uint8_t display_value[5];
+    uint8_t valueYOffset = 42;
     sprintf(display_value, "%d", value);
-    BSP_LCD_DisplayStringAt(screen_width / 2 - 28, y + ((menu_line_height / 2) - 13), display_value, CENTER_MODE);
+    BSP_LCD_SetFont(&Font_RobotoBlack32);
+    BSP_LCD_DisplayStringAt(0, y + valueYOffset + (((menu_line_height * 2) / 2) - 16), display_value, CENTER_MODE);
 }
 
 void drawWarning() {

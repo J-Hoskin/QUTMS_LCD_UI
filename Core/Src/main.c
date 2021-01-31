@@ -76,7 +76,7 @@ Drive_Mode current_drive_mode = STATIC_MODE;
 extern Event_Profile current_event;
 uint8_t selected_menu_option, max_menu_option;
 UI_Screen current_screen =  CAR_CONFIGURATION_SCREEN;
-float accumul_volts = 20.0f, accumul_temp = 40.0f, gearbox_temp = 40.0f, inverter_temp =
+float accumul_volts = 50.0f, accumul_temp = 40.0f, gearbox_temp = 1.0f, inverter_temp =
 		20.0f, motor_temp = 49.0f, accumul_charge = 0.5f, accumul_delta = 0.0f;
 float drawn_accumul_volts = 0.0f, drawn_accumul_temp = 0.0f, drawn_gearbox_temp = 0.0f, drawn_inverter_temp = 0.0f, drawn_motor_temp = 0.0f, drawn_accumul_charge = 0.0f, drawn_accumul_delta = 0.0f;
 uint8_t total_laps = 0, current_lap = 1;
@@ -213,7 +213,6 @@ int main(void)
 
 			if (activate_btn_pressed) {
 				changeEvent(events[selected_menu_option]);
-
 			}
 
 			if (back_btn_pressed) {

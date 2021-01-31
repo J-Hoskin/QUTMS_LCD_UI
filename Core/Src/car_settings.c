@@ -11,7 +11,7 @@ Event_Profile current_event;
 Driver_Profile drivers[4] = {
     { "Default", 45, 3, 100, 76 },
     { "James", 45, 3, 100, 76 },
-    { "Elon Musk", 25, 10, 10, 10 },
+    { "Elon Musk", 100, 10, 0, 0 },
     { "Issac Baldry", 14, 2, 55, 100 },
 };
 
