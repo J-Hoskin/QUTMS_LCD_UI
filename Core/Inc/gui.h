@@ -64,8 +64,11 @@ void updateAdvancedScreen();
 /* Returns true if the selected menu option has changed */
 bool updateMenuScroll();
 
+void updateCarConfiguration();
+
 /* UI Components */
-void drawHeaderBar(Drive_Mode current_drive_mode);
+void drawPrimaryHeaderBar(Drive_Mode current_drive_mode);
+void drawSecondaryHeaderBar(uint8_t* label);
 
 void drawMenuItemWithValue(uint16_t y, uint8_t* label, uint8_t value, bool selected, bool draw_borders);
 void updateMenuItemWithValue(uint16_t y, uint8_t* label, uint8_t value, bool selected);

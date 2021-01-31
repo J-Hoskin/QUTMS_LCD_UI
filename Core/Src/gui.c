@@ -22,8 +22,7 @@ extern float accumul_volts, accumul_temp, gearbox_temp, inverter_temp, motor_tem
 extern float drawn_accumul_volts, drawn_accumul_temp, drawn_gearbox_temp, drawn_inverter_temp, drawn_motor_temp, drawn_accumul_charge, drawn_accumul_delta;
 extern uint8_t total_laps, current_lap;
 char* menus[4] = { "Driver Select", "Event Select", "Car Config", "Advanced" };
-bool menu_pot_incremented = false;
-bool menu_pot_decremented = false;
+bool menu_pot_incremented, menu_pot_decremented, menu_pot_pressed;
 extern UI_Screen current_screen;
 #define max(x,y) (((x) >= (y)) ? (x) : (y));
 #define min(x,y) (((x) <= (y)) ? (x) : (y));
@@ -88,6 +87,15 @@ bool updateMenuScroll() {
 	return false;
 }
 
+void updateCarConfiguration(){
+	if(menu_pot_incremented){
+
+	}
+	else if(menu_pot_decremented){
+
+	}
+}
+
 /* UI Pages */
 void drawStartupScreen() {
     BSP_LCD_SetTextColor(primary_back_color);
@@ -97,7 +105,7 @@ void drawStartupScreen() {
 
 void drawRTDScreen() {
 	// Draw header bar
-	drawHeaderBar(READY_TO_DRIVE);
+	drawPrimaryHeaderBar(READY_TO_DRIVE);
 
 	// Draw accumulator bars
 	drawAccumulatorDeltaBar(38);
@@ -210,7 +218,7 @@ void updateRTDScreen() {
 
 void drawSMScreen() {
 	// Draw header bar
-	drawHeaderBar(STATIC_MODE);
+	drawPrimaryHeaderBar(STATIC_MODE);
 
 	// Draw accumulator bars
 	drawAccumulatorDeltaBar(38);
@@ -250,24 +258,17 @@ void updateSMScreen() {
 
 void drawDriverSelectionScreen() {
 	// Draw header bar
-	drawHeaderBar(STATIC_MODE);
-	BSP_LCD_SetTextColor(primary_back_color);
-	BSP_LCD_FillRect(0, 27, screen_width, 27);
-
-	// Draw page label
-	BSP_LCD_SetBackColor(primary_back_color);
-	BSP_LCD_SetTextColor(primary_text_color);
-	BSP_LCD_SetFont(&Font_RobotoMedium24);
-	BSP_LCD_DisplayStringAt(0, 24 + ((31 / 2) - 12), "Driver Select", CENTER_MODE);
+	drawPrimaryHeaderBar(STATIC_MODE);
+	drawSecondaryHeaderBar("Driver Select");
 
 	// Draw settings
-	uint8_t startingYPosition = 54;
+	uint8_t startingYPosition = 62;
 	for (int i = 0; i < 4; i++) {
 		drawMenuItem(startingYPosition + (menu_line_height * i), drivers[i].driver_name, selected_menu_option == i ? true : false, i != 0 ? true : false);
 	}
 }
 void updateDriverSelectionScreen(){
-	uint8_t startingYPosition = 54;
+	uint8_t startingYPosition = 62;
 
 	bool update_menu = updateMenuScroll();
 
@@ -281,30 +282,24 @@ void updateDriverSelectionScreen(){
 
 void drawEventSelectionScreen() {
 	// Draw header bar
-	drawHeaderBar(STATIC_MODE);
-	BSP_LCD_SetTextColor(primary_back_color);
-	BSP_LCD_FillRect(0, 24, screen_width, 31);
-
-	// Draw page label
-	BSP_LCD_SetBackColor(primary_back_color);
-	BSP_LCD_SetTextColor(primary_text_color);
-	BSP_LCD_SetFont(&Font_RobotoMedium24);
-	BSP_LCD_DisplayStringAt(screen_margin - 10, 24 + ((31 / 2) - 12), "Event Select", CENTER_MODE);
+	drawPrimaryHeaderBar(STATIC_MODE);
+	drawSecondaryHeaderBar("Event Select");
 
 	// Draw settings
+	uint8_t startingYPosition = 62;
 	for (int i = 0; i < 4; i++) {
-		drawMenuItem(55 + (menu_line_height * i), events[i].event_name, selected_menu_option == i ? true : false, i != 0 ? true : false);
+		drawMenuItem(startingYPosition + (menu_line_height * i), events[i].event_name, selected_menu_option == i ? true : false, i != 0 ? true : false);
 	}
 }
 void updateEventSelectionScreen() {
-	uint8_t startingYPosition = 55;
+	uint8_t startingYPosition = 62;
 
 	bool update_menu = updateMenuScroll();
 
 	if(update_menu){
 		// Draw event options
 		for (int i = 0; i < 4; i++) {
-			updateMenuItem(55 + (menu_line_height * i), events[i].event_name, selected_menu_option == i ? true : false);
+			updateMenuItem(startingYPosition + (menu_line_height * i), events[i].event_name, selected_menu_option == i ? true : false);
 		}
 	}
 }
@@ -312,18 +307,11 @@ void updateEventSelectionScreen() {
 void drawCarConfigurationScreen() {
 	selected_menu_option = 2;
 	// Draw header bar
-	drawHeaderBar(STATIC_MODE);
-	BSP_LCD_SetTextColor(primary_back_color);
-	BSP_LCD_FillRect(0, 27, screen_width, 27);
-
-	// Draw page label
-	BSP_LCD_SetBackColor(primary_back_color);
-	BSP_LCD_SetTextColor(primary_text_color);
-	BSP_LCD_SetFont(&Font_RobotoMedium24);
-	BSP_LCD_DisplayStringAt(screen_margin - 10, 24 + ((31 / 2) - 12), "Car Config", CENTER_MODE);
+	drawPrimaryHeaderBar(STATIC_MODE);
+	drawSecondaryHeaderBar("Car Config");
 
 	// Draw settings
-	uint8_t startingYPos = 54;
+	uint8_t startingYPos = 62;
 	drawMenuItemWithValue(startingYPos + (menu_line_height * 0), "Reg Braking", current_driver.car_configuration.regen_braking, selected_menu_option == 0, false);
     drawMenuItemWithValue(startingYPos + (menu_line_height * 1), "Torq Vector", current_driver.car_configuration.torque_vectoring, selected_menu_option == 1, true);
     drawMenuItemWithValue(startingYPos + (menu_line_height * 2), "Dash Bright", current_driver.car_configuration.dash_led_brightness, selected_menu_option == 2, true);
@@ -333,7 +321,7 @@ void updateCarConfigurationScreen() {
 	// Draw settings
 	bool update_menu = updateMenuScroll() /*|| pot_incremented*/;
 
-	uint8_t startingYPos = 54;
+	uint8_t startingYPos = 62;
 	if(update_menu){
 		updateMenuItemWithValue(startingYPos + (menu_line_height * 0), "Reg Braking", current_driver.car_configuration.regen_braking, selected_menu_option == 0);
 		updateMenuItemWithValue(startingYPos + (menu_line_height * 1), "Torq Vector", current_driver.car_configuration.torque_vectoring, selected_menu_option == 1);
@@ -343,7 +331,7 @@ void updateCarConfigurationScreen() {
 }
 
 /* UI Components */
-void drawHeaderBar(Drive_Mode drive_mode){
+void drawPrimaryHeaderBar(Drive_Mode drive_mode){
 	// Draw background bar
 	BSP_LCD_SetBackColor(primary_back_color);
 	BSP_LCD_SetTextColor(primary_back_color);
@@ -358,6 +346,17 @@ void drawHeaderBar(Drive_Mode drive_mode){
 	BSP_LCD_SetTextColor(primary_text_color);
 	BSP_LCD_SetFont(&Font_RobotoMedium24);
 	BSP_LCD_DisplayStringAt(0, 0, drive_mode_label, CENTER_MODE);
+}
+
+void drawSecondaryHeaderBar(uint8_t* label){
+	BSP_LCD_SetTextColor(primary_back_color);
+	BSP_LCD_FillRect(0, 24, screen_width, 38);
+
+	// Draw page label
+	BSP_LCD_SetBackColor(primary_back_color);
+	BSP_LCD_SetTextColor(primary_text_color);
+	BSP_LCD_SetFont(&Font24);
+	BSP_LCD_DisplayStringAt(0, 24 + ((38 / 2) - 12), label, CENTER_MODE);
 }
 
 void drawAccumulatorDeltaBar(uint16_t yPos) {
@@ -583,7 +582,7 @@ void drawMenuItem(uint16_t y, uint8_t* label, bool selected, bool draw_borders) 
 	if(selected) BSP_LCD_SetTextColor(selection_color);
 	BSP_LCD_SetBackColor(LCD_COLOR_BLACK);
 	BSP_LCD_SetFont(&Font32);
-	BSP_LCD_DisplayStringAt(0, y + ((menu_line_height / 2) - 13), label, CENTER_MODE);
+	BSP_LCD_DisplayStringAt(0, y + ((menu_line_height / 2) - 17), label, CENTER_MODE);
 }
 void updateMenuItem(uint16_t y, uint8_t* label, bool selected) {
     // Draw label text
@@ -591,7 +590,7 @@ void updateMenuItem(uint16_t y, uint8_t* label, bool selected) {
     BSP_LCD_SetTextColor(primary_text_color);
     if(selected) BSP_LCD_SetTextColor(selection_color);
     BSP_LCD_SetFont(&Font_RobotoMedium26);
-    BSP_LCD_DisplayStringAt(0, y + ((menu_line_height / 2) - 13), label, CENTER_MODE);
+    BSP_LCD_DisplayStringAt(0, y + ((menu_line_height / 2) - 17), label, CENTER_MODE);
 }
 
 void drawMenuItemWithValue(uint16_t y, uint8_t* label, uint8_t value, bool selected, bool draw_borders) {

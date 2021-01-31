@@ -75,9 +75,9 @@ Drive_Mode current_drive_mode = STATIC_MODE;
 
 extern Event_Profile current_event;
 uint8_t selected_menu_option, max_menu_option;
-UI_Screen current_screen = DRIVER_SELECTION_SCREEN;
+UI_Screen current_screen =  CAR_CONFIGURATION_SCREEN;
 float accumul_volts = 20.0f, accumul_temp = 40.0f, gearbox_temp = 40.0f, inverter_temp =
-		20.0f, motor_temp = 49.0f, accumul_charge = 1.0f, accumul_delta = 0.0f;
+		20.0f, motor_temp = 49.0f, accumul_charge = 0.5f, accumul_delta = 0.0f;
 float drawn_accumul_volts = 0.0f, drawn_accumul_temp = 0.0f, drawn_gearbox_temp = 0.0f, drawn_inverter_temp = 0.0f, drawn_motor_temp = 0.0f, drawn_accumul_charge = 0.0f, drawn_accumul_delta = 0.0f;
 uint8_t total_laps = 0, current_lap = 1;
 extern Driver_Profile drivers[4];
@@ -87,6 +87,9 @@ volatile bool activate_btn_pressed = false;
 volatile uint8_t active_btn_state = 0;
 volatile bool back_btn_pressed = false;
 volatile uint8_t back_btn_state = 0;
+
+extern bool menu_pot_incremented, menu_pot_decremented, menu_pot_pressed;
+uint8_t prev_pot_value, current_pot_value;
 uint16_t raw;
 
 /* USER CODE END 0 */
@@ -162,7 +165,19 @@ int main(void)
 			back_btn_pressed = true;
 		}
 
-		accumul_delta -= 0.05f;
+		// Check if menu pot changed
+		if(!HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_3)){
+			menu_pot_pressed = true;
+		}
+
+		current_pot_value = ((TIM2->CNT)>>2); // right-shifting the counter value by 2 in order to print 1 tick for each actual tick on the encoder
+		if(current_pot_value < prev_pot_value){
+			menu_pot_decremented = true;
+		}
+		else if(current_pot_value > prev_pot_value){
+			menu_pot_incremented = true;
+		}
+		prev_pot_value = current_pot_value;
 
 		// Update screen
 		if (current_screen == RTD_SCREEN) {
@@ -182,7 +197,6 @@ int main(void)
 					drawScreen(CAR_CONFIGURATION_SCREEN);
 					break;
 				}
-				activate_btn_pressed = false;
 			}
 		} else if (current_screen == DRIVER_SELECTION_SCREEN) {
 			updateDriverSelectionScreen();
@@ -193,38 +207,38 @@ int main(void)
 
 			if (back_btn_pressed) {
 				drawScreen(SM_SCREEN);
-				back_btn_pressed = false;
 			}
 		} else if (current_screen == EVENT_SELECTION_SCREEN) {
-			//updateEventSelectionScreen();
+			updateEventSelectionScreen();
 
 			if (activate_btn_pressed) {
 				changeEvent(events[selected_menu_option]);
-				activate_btn_pressed = false;
+
 			}
 
 			if (back_btn_pressed) {
 				drawScreen(SM_SCREEN);
-				back_btn_pressed = false;
 			}
 		} else if (current_screen == CAR_CONFIGURATION_SCREEN) {
 			updateCarConfigurationScreen();
 
 			// Handle activate/value change of settings
-	//        if(pot_incremented){
-	//        	update_car_configuration();
-	//			activate_btn_pressed = false;
-	//		}
+	        if(menu_pot_pressed){
+	        	updateCarConfiguration();
+			}
 
 			if (back_btn_pressed) {
 				drawScreen(SM_SCREEN);
-				back_btn_pressed = false;
 			}
-
 		}
 
+		// Reset inputs
+		back_btn_pressed = false;
+		activate_btn_pressed = false;
+		menu_pot_pressed = false;
+
 		// Refresh Delay
-		HAL_Delay(200);
+		HAL_Delay(100);
 	}
   /* USER CODE END 3 */
 }

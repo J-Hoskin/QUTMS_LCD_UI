@@ -244,4 +244,3 @@ VP_SYS_VS_tim4.Mode=TIM4
 VP_SYS_VS_tim4.Signal=SYS_VS_tim4
 board=NUCLEO-F446RE
 boardIOC=true
-isbadioc=false
